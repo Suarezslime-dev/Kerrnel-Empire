@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin KERNEL | Gestion de l'Empire</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        :root { --red: #ff4444; --bg: #0a0a0c; --card: #111114; --blue: #00aaff; }
+        body { background: var(--bg); color: white; font-family: 'Roboto', sans-serif; margin: 0; padding: 50px 20px; text-align: center; }
+        
+        .admin-container {
+            background: var(--card);
+            border: 2px solid var(--red);
+            padding: 40px;
+            border-radius: 20px;
+            display: inline-block;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 0 30px rgba(255, 68, 68, 0.2);
+        }
+
+        h1 { font-family: 'Orbitron'; color: var(--red); margin-bottom: 30px; letter-spacing: 2px; }
+        h3 { font-family: 'Orbitron'; color: var(--blue); font-size: 0.9rem; text-align: left; margin-top: 25px; text-transform: uppercase; }
+
+        .form-group { margin-bottom: 20px; text-align: left; }
+        
+        input[type="text"], input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            background: #000;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: white;
+            box-sizing: border-box;
+        }
+
+        input[type="text"]:focus { border-color: var(--blue); outline: none; }
+
+        button {
+            width: 100%;
+            background: var(--red);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: 'Orbitron';
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: 0.3s;
+        }
+
+        button:hover { background: #cc0000; transform: translateY(-2px); }
+
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            color: #666;
+            text-decoration: none;
+            font-size: 0.8rem;
+        }
+        .back-link:hover { color: white; }
+
+        .stats-preview {
+            display: flex;
+            justify-content: space-around;
+            background: #000;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #222;
+        }
+        .stat-item { font-family: 'Orbitron'; font-size: 0.8rem; }
+        .stat-val { color: var(--red); display: block; font-size: 1.2rem; }
+    </style>
+</head>
+<body>
+
+    <div class="admin-container">
+        <h1>ADMIN KERNEL</h1>
+
+        <div class="stats-preview">
+            <div class="stat-item">VUES <span id="stat-views" class="stat-val">0</span></div>
+            <div class="stat-item">SUBS <span id="stat-subs" class="stat-val">0</span></div>
+            <div class="stat-item">JEUX <span id="stat-games" class="stat-val">0</span></div>
+        </div>
+
+        <form action="/admin/update" method="post" enctype="multipart/form-data">
+            
+            <div class="form-group">
+                <h3>Identité Visuelle</h3>
+                <label style="font-size: 0.7rem; color: #888;">Changer la photo du cercle rouge :</label>
+                <input type="file" name="avatar" accept="image/*">
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #222; margin: 30px 0;">
+
+            <div class="form-group">
+                <h3>Ajouter un Projet Unity</h3>
+                <input type="text" name="game_name" placeholder="Nom du jeu (ex: Empire War)">
+                <input type="text" name="game_url" placeholder="Lien du build (ex: /static/games/jeu1/index.html)">
+            </div>
+
+            <button type="submit">METTRE À JOUR LE SITE</button>
+        </form>
+
+        <a href="/" class="back-link">← Voir le site public</a>
+    </div>
+
+    <script>
+        // Charger les stats actuelles pour l'admin
+        async function loadStats() {
+            const res = await fetch('/api/all');
+            const data = await res.json();
+            document.getElementById('stat-views').innerText = data.stats.views;
+            document.getElementById('stat-subs').innerText = data.stats.subs;
+            document.getElementById('stat-games').innerText = data.games.length;
+        }
+        loadStats();
+    </script>
+
+</body>
+</html>
